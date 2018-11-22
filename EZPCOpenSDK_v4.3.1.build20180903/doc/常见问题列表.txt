@@ -1,0 +1,77 @@
+PC OpenSDK常见问题
+
+1、预览异常，并报errorcode=2034的错误码
+您好， 请确保客户端所在网络当下的下行带宽是否被占用，如果下行带宽占用比较严重的情况下，会报2034的错误码。
+ 
+2、PC SDK 操作手册下载，内容空白？
+ 您好，计算机系统处于安全考虑，要求用户手动授权， 具体操作：选择操作手册-》右键-》属性-》常规，点击“解除锁定”即可。
+ 
+3、调用OpenSDK_CapturePicture接口，保存失败？
+您好，此截图接口传入的存储数据只支持UTF-8，用户在传入路径之前，先要保证传入的路径名为UTF-8格式。
+
+4、使用SDK二次开发，可以实现录像并保存文件到本地吗？
+您好，可以的。我们有一个数据回调的接口，相关接口为OpenSDK_SetDataCallBack, 回调函数定义为OpenSDK_DataCallBack，当流上来时，你写到本地。
+
+5、sdk已经有了，能否提供一个.net平台的C#语言的工程demo？！
+您好，我们暂时没有C#版本的Demo。不过有很多热心的开发者有提供涉及C#开发的帖子，请参看http://bbs.ys7.com/thread-21386-1-1.html
+
+6、获取MD5存储密钥比较不相等，重新获取密钥， 返回2012错误码?
+您好，这个错误的意思是用户输入的设备验证码不对。
+
+7、我们研究过了该平台提供的相关文档，所提供的接口都是需要连接互联网的，我们的应用环境是所有设备都在专用的局域网下，不连互联网的。鉴于贵公司的萤石工作室软件能在局域网下搜索到设备并预览，我们希望贵公司能提供该功能相关的接口。
+您好，我们开发平台PC端没有提供针对局域网的接口。
+
+8、OpenSDK_StartRealPlay[in] iVideoLevel 视频质量，输入范围在0-2之间 ， 请问一下高清，均衡，流畅分别对应的数字是哪个？是数字越大越清晰吗？
+您好，0是流畅，1是均衡，2 是高清
+
+9. 贵公司提供的Demo中，不仅有动态链接库，还有相关lib库。既然是动态加载，lib库是否是必须的？
+您好， lib库不是静态库，是用于隐式加载动态库之用， 如果你是显示加载dll，可以不使用lib库。
+
+10. Qt Demo是基于Qt 4.8.5的， 是否必须用Qt 开发？
+您好， PC客户端开发模式和IDE完全开发者决定，目前OpenSDK V2.4.3版本包括win32和linux32版本。
+
+11. PC SDK支持web网页开发吗？我们想在自己的web平台上实现监控视频的播放。
+您好，您可以将PC SDK封装成插件，实现您所提及的功能。
+
+12. AccessToken是永久的吗？还是会过期呢？
+您好， AccessToken是会过期的， 有效期7天。
+
+13. 你好，请问预览接口中szCameraId和szSafeKey是表示的什么？
+您好， szSafeKey默认就是设备验证码。szCameraId是监控点ID，通过调用OpenSDK_Data_GetDevList接口拿到。
+
+14. 您好， PC OpenSDK是否支持录像功能？
+您好，支持的，调用StartRealPlay接口之前调用SetDataCallBack接口，媒体流会回调到数据回调接口中，只需将录像写到本地即可。可以使用海康播放器进行播放。
+
+15. 您好， PC OpenSDK支持平台版本有哪些呢？
+您好，PC OpenSDK现在只支持win32和linux32版本。
+
+16. PC OpenSDK支持哪些功能呢？
+您好， 支持预览（录像）、回放、告警（布撤防）、语音对讲、添加设备、删除设备等功能。
+
+
+
+PC OpenSDK 编程相关问题
+
+一、OpenSDK V2.3.2.4支持同步接口是什么意思？如何使用？ 
+ 答：OpenSDK V2.3.2.4开始同时支持接口异步和同步调用方式，以实时预览为例：
+1)接口异步调用方式是指接口成功启动子线程进行取流操作之后，接口直接返回，子线程取流状况需要在消息回调接口里面反映出来。
+2)接口同步调用方式是指接口将取流结果同步反馈给调用者。 
+
+二、OpenSDK Demo 有哪些版本，适用于哪些场景？ 
+ 答：OpenSDK Demo包括Qt Demo和GTest Demo，都提供了源代码。 Qt Demo现在只支持Windows平台，主要应用于集成功能测试；GTest Demo同时支持windows和linux，主要应用于接口的单元测试。 
+
+三、OpenSDK 错误码是怎么设置的？如何快速根据错误码定位问题？ 
+ 答：错误码主要分为OpenSDK自身定义的错误码和OpenSDK依赖库定义的错误码。消息回调接口中的错误码主要是OpenSDK依赖库相关错误码，这个错误可以从操作手册的文件列表中INS_ErrorCode.h文件里查看。 
+
+四、OpenSDK是否支持向下兼容？使用显式下载失败，比方，当前版本预览接口多了一个同步回传参数 
+ 答： OpenSDK V2.3.2.0支持接口同步调用，有10个接口的输入参数有所增加，在OpenSDK V2.4.1.1版本中对老接口进行了兼容（函数名变更为[OrignialFunName]_Old，定义在include.h中），建议开发者使用新接口，老接口以后将被废弃。 （相关包括OpenSDK_AllocSession、OpenSDK_StartRealPlay、OpenSDK_StopRealPlay、OpenSDK_StartPlayBack、OpenSDK_StopPlayBack、OpenSDK_StartSearch、OpenSDK_PTZCtrl、OpenSDK_DevDefence、OpenSDK_DevDefenceByDev、OpenSDK_Alarm_SetMsgCallBack）
+
+五、OpenSDK透传接口支持哪些OpenApi？具体使用可以参照哪里呢？ 
+ 答：OpenSDK_RequestPassThrough接口是对萤石云接口的透传，支持布撤防、用户注册、安全认证、开通云服务等功能，具体请参照OpenApi的《萤石云SDK透传接口说明文档》，使用方法可以参照OpenSDK GTest Demo中透传模块的源码。
+
+六、如何提高取流时间？提高取流路数呢？ 
+ 答： OpenSDK V2.4.3版本取流性能得到较大优化，网路环境稳定情况下，流媒体取流时间基本在6s之内，平均取流时间在4s左右。不包括走P2P打洞取流。
+ 关于调用OpenSDK_StartRealPlay预览接口存在两种应用场景，一是纯粹取流（不传窗口句柄，即不用OpenSDK进行播放）支持40路并发播放。二是支持实时预览播放，单进程支持路数32路，可以利用多进程播放机制实现40路并发播放（Qt Demo展示如何实现此机制）。 
+
+七、OpenSDK部分接口增加了LP_NSCBMsg参数，有何用处？如何使用呢？
+答：LP_NSCBMsg参数是为着支持接口同步功能设置的，您调用方式仍然是异步回调的，即AllocSession传入OpenSDK_MessageHandler且bSync = false. 您传入NULL即可。如果您希望实现预览同步（同步接口可以马上拿到回调错误信息），你需要设置AllocSession参数bSync = true且设置iTimeOut时间。另外使用同步模式时， LP_NSCBMsg参数不允许为NULL。
